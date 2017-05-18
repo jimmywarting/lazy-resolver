@@ -1,0 +1,25 @@
+{
+  "name": "lazy-resolver",
+  "version": "1.0.0",
+  "description": "Skip hoops with promises Edit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimmywarting/lazy-resolver.git"
+  },
+  "keywords": [
+    "promise",
+    "resolve",
+    "async",
+    "sync"
+  ],
+  "author": "Jimmy Wärting",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jimmywarting/lazy-resolver/issues"
+  },
+  "homepage": "https://github.com/jimmywarting/lazy-resolver#readme"
+}

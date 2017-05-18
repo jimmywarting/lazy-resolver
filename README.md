@@ -1,4 +1,6 @@
 # lazy-resolver
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/jimmywarting/lazy-resolver.svg)](https://greenkeeper.io/)
 Skip hoops with promises
 
 ```bash

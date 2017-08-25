@@ -13,6 +13,6 @@ module.exports = function resolve(target) {
       return resolve(target.then(result => {
         return result.apply(that, args)
       }))
-    },
+    }
   })
 }

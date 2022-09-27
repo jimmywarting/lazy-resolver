@@ -31,12 +31,13 @@ fetch('https://httpbin.org/get?items=4&items=2')
   .then(console.log, console.warn)
 
 // Browser variant
-const result = await resolve(window)
+resolve(window)
   .fetch('https://httpbin.org/get?items=4&items=2')
   .json()
   .args
   .items
   .map(n => ~~n * 4)
+  .forEach(n => console.log(n))
 ```
 
 Test if obj exist, similar to lodash/get or optional chaining

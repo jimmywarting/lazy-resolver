@@ -63,12 +63,12 @@ await result(url).then(response => console.log(response))
 **Default mode (non-revocable):**
 - ✓ Elegant chaining without `.then()` calls
 - ✓ Proxy can be used indefinitely
-- − Proxy objects stay in memory
+- ✗ Proxy objects stay in memory
 
 **Revocable mode:**
 - ✓ Memory efficient (proxy is cleaned up after resolution)
 - ✓ Prevents accidental usage after resolution
-- − Loses the ability to chain after initial resolution
-- − Cannot use the elegant syntax for complex promise chains
+- ✗ Loses the ability to chain after initial resolution
+- ✗ Cannot use the elegant syntax for complex promise chains
 
 For most use cases, the default non-revocable mode is recommended to maintain the elegant chaining syntax.

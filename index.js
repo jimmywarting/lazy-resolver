@@ -63,11 +63,8 @@ const resolve = (target, options = {}) => {
       }
     })
     
-    // Revoke the proxy once the target promise resolves
-    Promise.resolve(target).then(() => {
-      revoke()
-    }).catch(() => {
-      // Still revoke on error to prevent memory leaks
+    // Revoke the proxy once the target promise resolves or rejects
+    Promise.resolve(target).finally(() => {
       revoke()
     })
     

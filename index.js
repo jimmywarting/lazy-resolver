@@ -28,9 +28,53 @@
 /**
  * @template T
  * @param {Awaitable<T>} target
+ * @param {Object} [options]
+ * @param {boolean} [options.revocable=false] - If true, the proxy will be revoked once the target promise resolves
  * @returns {Lazy<T>}
  */
-const resolve = target => {
+const resolve = (target, options = {}) => {
+  const { revocable = false } = options
+  
+  // If revocable mode is enabled, use Proxy.revocable
+  if (revocable) {
+    const { proxy, revoke } = Proxy.revocable(() => {}, {
+      get (noop, key) {
+        if (key === 'then') {
+          const p = Promise.resolve(target)
+          return p.then.bind(p)
+        }
+
+        return resolve(
+          Promise.resolve(target).then(obj => {
+            const val = obj[key]
+            return typeof val === 'function' ? val.bind(obj) : val
+          }),
+          options
+        )
+      },
+
+      apply (noop, that, args) {
+        return resolve(
+          Promise.resolve(target).then(fn => {
+            return fn.apply(that, args)
+          }),
+          options
+        )
+      }
+    })
+    
+    // Revoke the proxy once the target promise resolves
+    Promise.resolve(target).then(() => {
+      revoke()
+    }).catch(() => {
+      // Still revoke on error to prevent memory leaks
+      revoke()
+    })
+    
+    return proxy
+  }
+  
+  // Default non-revocable mode (current behavior)
   return new Proxy(() => {}, {
     get (noop, key) {
       if (key === 'then') {
@@ -42,7 +86,8 @@ const resolve = target => {
         Promise.resolve(target).then(obj => {
           const val = obj[key]
           return typeof val === 'function' ? val.bind(obj) : val
-        })
+        }),
+        options
       )
     },
 
@@ -50,7 +95,8 @@ const resolve = target => {
       return resolve(
         Promise.resolve(target).then(fn => {
           return fn.apply(that, args)
-        })
+        }),
+        options
       )
     }
   })

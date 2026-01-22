@@ -45,3 +45,30 @@ Test if obj exist, similar to lodash/get or optional chaining
 const obj = {}
 exist = await resolve(obj).foo.bar().buz[28]
 ```
+
+# Revocable Proxies
+
+The library now supports optional revocable proxies using `Proxy.revocable`. When enabled, the proxy is automatically revoked once the target promise resolves, which can help with memory management.
+
+```js
+// Enable revocable mode
+const result = resolve(import('node-fetch'), { revocable: true }).default
+
+// The proxy will be revoked after the promise resolves
+await result(url).then(response => console.log(response))
+```
+
+## Trade-offs
+
+**Default mode (non-revocable):**
+- ✓ Elegant chaining without `.then()` calls
+- ✓ Proxy can be used indefinitely
+- − Proxy objects stay in memory
+
+**Revocable mode:**
+- ✓ Memory efficient (proxy is cleaned up after resolution)
+- ✓ Prevents accidental usage after resolution
+- − Loses the ability to chain after initial resolution
+- − Cannot use the elegant syntax for complex promise chains
+
+For most use cases, the default non-revocable mode is recommended to maintain the elegant chaining syntax.
